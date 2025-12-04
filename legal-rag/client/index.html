@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalJudgement RAG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LegalJudgement <span class="highlight">RAG</span></h1>
+            <p class="subtitle">AI-Powered Legal Research Assistant</p>
+        </header>
+
+        <main>
+            <section class="ingestion-section">
+                <h2>Document Ingestion</h2>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept=".pdf" hidden>
+                    <div class="upload-content">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="upload-icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <p>Drag & drop PDF here or <span class="browse-btn">Browse</span></p>
+                    </div>
+                </div>
+                <div id="uploadStatus" class="status-message"></div>
+            </section>
+
+            <section class="query-section">
+                <h2>Ask a Question</h2>
+                <div class="search-box">
+                    <input type="text" id="queryInput" placeholder="e.g., What was the verdict in the Smith case?">
+                    <button id="queryBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </button>
+                </div>
+                <div id="loadingIndicator" class="loading hidden">
+                    <div class="spinner"></div>
+                    <span>Analyzing documents...</span>
+                </div>
+                <div id="resultsArea" class="results-area hidden">
+                    <div class="answer-box">
+                        <h3>Answer</h3>
+                        <p id="answerText"></p>
+                    </div>
+                    <div class="citations-box">
+                        <h3>Citations</h3>
+                        <div id="citationsList" class="citations-list"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

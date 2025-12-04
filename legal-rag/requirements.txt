@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+python-multipart
+celery
+redis
+langchain
+langchain-google-genai
+langchain-pinecone
+langchain-community
+pymupdf
+pinecone-client
+python-dotenv
