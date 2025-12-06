@@ -16,7 +16,7 @@ vectorstore = PineconeVectorStore(
 )
 
 # Setup LLM (Gemini Pro)
-llm = ChatGoogleGenerativeAI(model="gemini-pro", temperature=0.0)
+llm = ChatGoogleGenerativeAI(model="gemini-3-pro-preview", temperature=0.1)
 
 # 1. Define the RAG Prompt
 # We strictly instruct the model to use ONLY the context.

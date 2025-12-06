@@ -26,6 +26,13 @@ A Retrieval-Augmented Generation (RAG) system for legal judgments using FastAPI,
         CELERY_BROKER_URL=redis://localhost:6379/0
         ```
 
+4.  **Setup Pinecone Index**:
+    -   Log in to your [Pinecone Console](https://app.pinecone.io/).
+    -   Create a new index:
+        -   **Name**: `legal-judgement-index` (Must match `PINECONE_INDEX_NAME` in `.env`)
+        -   **Dimensions**: `768` (for `models/embedding-001`)
+        -   **Metric**: `cosine`
+
 ## Running the Application
 
 1.  **Start Redis** (Required for Celery):
