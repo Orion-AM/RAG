@@ -16,9 +16,9 @@ vectorstore = PineconeVectorStore(
 )
 
 # Setup LLM (Gemini Pro)
-llm = ChatGoogleGenerativeAI(model="gemini-3-pro-preview", temperature=0.1)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.1)
 
-# 1. Define the RAG Prompt
+# 1. Define the RAG Prompt  
 # We strictly instruct the model to use ONLY the context.
 system_prompt = (
     "You are a legal assistant. Use the following pieces of retrieved context to answer "

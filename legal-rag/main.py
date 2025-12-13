@@ -60,24 +60,31 @@ async def ingest_pdf(file: UploadFile = File(...)):
 
 @app.post("/api/v1/query", response_model=QueryResponse)
 async def query_index(request: QueryRequest):
-    # Call the RAG chain
-    result = get_answer(request.query)
-    
-    # Format Citations from the retrieved context
-    citations = []
-    for doc in result["context"]:
-        citations.append(Citation(
-            source=doc.metadata.get("filename", "unknown"),
-            # Default to page 1 if metadata missing
-            page=int(doc.metadata.get("page", 0)) + 1, 
-            # First 100 chars as snippet
-            chunk_text_snippet=doc.page_content[:100] + "..." 
-        ))
+    try:
+        # Call the RAG chain
+        result = get_answer(request.query)
+        
+        # Format Citations from the retrieved context
+        citations = []
+        for doc in result["context"]:
+            citations.append(Citation(
+                source=doc.metadata.get("filename", "unknown"),
+                # Default to page 1 if metadata missing
+                page=int(doc.metadata.get("page", 0)) + 1, 
+                # First 100 chars as snippet
+                chunk_text_snippet=doc.page_content[:100] + "..." 
+            ))
 
-    return {
-        "answer": result["answer"],
-        "citations": citations
-    }
+        return {
+            "answer": result["answer"],
+            "citations": citations
+        }
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        if "429" in str(e):
+             raise HTTPException(status_code=429, detail="Google Gemini API Quota Exceeded. Please check your billing or try again later.")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/")
 def health_check():
