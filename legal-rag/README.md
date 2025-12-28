@@ -9,43 +9,68 @@ A Retrieval-Augmented Generation (RAG) system for legal judgments using FastAPI,
 -   **Semantic Search**: Uses Google Gemini embeddings and Pinecone for vector search.
 -   **RAG Querying**: Ask questions about the judgments and get answers with citations.
 
-## Setup
+## Configuration & Prerequisites
 
-1.  **Clone the repository** (if applicable).
-2.  **Install dependencies**:
+### 1. Prerequisites
+- **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: For running the application in containers.
+- **[Ollama](https://ollama.com/)**: Must be installed and running on your host machine to provide LLM and embedding services.
+- **Pinecone Account**: For vector storage.
+
+### 2. Prepare Ollama Models
+Pull the specific models used by the application:
+```bash
+ollama pull gemma3:4b
+ollama pull embeddinggemma
+```
+
+### 3. Environment Setup
+Create a `.env` file in the root directory.
+```bash
+# .env content
+PINECONE_API_KEY=your_pinecone_api_key
+PINECONE_INDEX_NAME=legal-judgement-index
+```
+*Note: `CELERY_BROKER_URL` and `OLLAMA_BASE_URL` are automatically configured in `docker-compose.yml`.*
+
+### 4. Pinecone Index Setup
+- Log in to [Pinecone Console](https://app.pinecone.io/).
+- Create a new index:
+    - **Name**: `legal-judgement-index` (Must match `.env`)
+    - **Dimensions**: `768` (for `embeddinggemma`)
+    - **Metric**: `cosine`
+
+## Application Setup (Docker Recommended)
+
+### Option A: Run with Docker
+This is the easiest way to get the full stack (Redis, Worker, Backend, Client) running.
+
+1.  **Build and Start**:
+    ```bash
+    docker-compose up --build
+    ```
+2.  **Access Components**:
+    - **Web Interface**: `http://localhost:3000`
+    - **API Docs**: `http://localhost:8000/docs`
+
+### Option B: Run Manually (Local Development)
+If you prefer running services individually:
+
+1.  **Install Python Dependencies**:
     ```bash
     pip install -r requirements.txt
     ```
-3.  **Configure Environment**:
-    -   Rename `.env` (if it's a template) or ensure it exists.
-    -   Fill in your API keys:
-        ```env
-        GOOGLE_API_KEY=your_google_gemini_api_key
-        PINECONE_API_KEY=your_pinecone_api_key
-        PINECONE_INDEX_NAME=legal-judgement-index
-        CELERY_BROKER_URL=redis://localhost:6379/0
-        ```
 
-4.  **Setup Pinecone Index**:
-    -   Log in to your [Pinecone Console](https://app.pinecone.io/).
-    -   Create a new index:
-        -   **Name**: `legal-judgement-index` (Must match `PINECONE_INDEX_NAME` in `.env`)
-        -   **Dimensions**: `768` (for `models/embedding-001`)
-        -   **Metric**: `cosine`
-
-## Running the Application
-
-1.  **Start Redis** (Required for Celery):
+2.  **Start Redis**:
     ```bash
     docker run -d -p 6379:6379 redis
     ```
 
-2.  **Start the Celery Worker**:
+3.  **Start Celery Worker**:
     ```bash
     celery -A app.worker.celery_app worker --loglevel=info
     ```
 
-3.  **Start the FastAPI Server**:
+4.  **Start API Server**:
     ```bash
     uvicorn main:app --reload
     ```
@@ -64,14 +89,15 @@ A Retrieval-Augmented Generation (RAG) system for legal judgments using FastAPI,
 
 A modern web interface is available in the `client/` directory.
 
-1.  **Open the UI**:
-    -   Simply open `client/index.html` in your web browser.
-    -   Or serve it using a simple HTTP server:
+### Accessing the UI
+- **Docker**: Visit `http://localhost:3000`.
+- **Manual**: 
+    - Serve it using a simple HTTP server:
         ```bash
         cd client
         python -m http.server 3000
         ```
-        Then visit `http://localhost:3000`.
+    - Or simply open `client/index.html` in your web browser.
 
 2.  **Use the UI**:
     -   **Upload**: Drag and drop a PDF file to ingest it.

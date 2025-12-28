@@ -1,14 +1,17 @@
 import os
 from langchain_community.document_loaders import PyMuPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # Initialize Embeddings
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+embeddings = OllamaEmbeddings(
+     model="embeddinggemma",
+     base_url=os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+)
 
 def ingest_document(file_path: str, file_id: str):
     """

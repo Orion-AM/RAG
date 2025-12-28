@@ -19,11 +19,14 @@ services:
       - .env
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
     depends_on:
       - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./temp_uploads:/app/temp_uploads
-      - .:/app  # Mount code for hot reload (excludes dependencies in container)
+      - .:/app # Mount code for hot reload (excludes dependencies in container)
 
   worker:
     build:
@@ -35,8 +38,11 @@ services:
       - .env
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
     depends_on:
       - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./temp_uploads:/app/temp_uploads
       - .:/app # Mount code for changes

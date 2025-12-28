@@ -79,7 +79,8 @@ h2 {
     transition: all 0.3s ease;
 }
 
-.upload-area:hover, .upload-area.dragover {
+.upload-area:hover,
+.upload-area.dragover {
     border-color: var(--accent-color);
     background-color: rgba(59, 130, 246, 0.05);
 }
@@ -111,8 +112,13 @@ h2 {
     min-height: 1.5rem;
 }
 
-.status-message.success { color: var(--success-color); }
-.status-message.error { color: var(--error-color); }
+.status-message.success {
+    color: var(--success-color);
+}
+
+.status-message.error {
+    color: var(--error-color);
+}
 
 /* Query Section */
 .search-box {
@@ -161,9 +167,7 @@ button:disabled {
 }
 
 /* Results Area */
-.hidden {
-    display: none;
-}
+/* Moved to bottom */
 
 .loading {
     display: flex;
@@ -184,7 +188,9 @@ button:disabled {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .answer-box {
@@ -224,4 +230,8 @@ button:disabled {
     font-style: italic;
     border-left: 2px solid var(--border-color);
     padding-left: 0.75rem;
+}
+
+.hidden {
+    display: none !important;
 }

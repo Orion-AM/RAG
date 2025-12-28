@@ -1,5 +1,6 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_community.chat_models import ChatOllama
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -9,14 +10,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Setup Vector Store Connection (for reading)
-embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+# Using 'gemma' for embeddings
+embeddings = OllamaEmbeddings(
+    model="embeddinggemma", 
+    base_url=os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+)
 vectorstore = PineconeVectorStore(
     index_name=os.getenv("PINECONE_INDEX_NAME"),
     embedding=embeddings
 )
 
-# Setup LLM (Gemini Pro)
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.1)
+# Setup LLM (Ollama - gemma3:4b)
+llm = ChatOllama(
+    model="gemma3:4b", 
+    temperature=0.1,
+    base_url=os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
+)
 
 # 1. Define the RAG Prompt  
 # We strictly instruct the model to use ONLY the context.
